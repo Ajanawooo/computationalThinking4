@@ -9,4 +9,5 @@ The software is built up step by step. Each step introduces a clearly named arch
 ## Technical Setup
 
 - **Monorepo** based on **npm workspaces**
-- **Nuxt.js** as the framework for the web application 
+- **Nuxt** as the framework for the web application (`frontend/`)
+- **Tailwind CSS** with **shadcn-vue** for styling and UI components
