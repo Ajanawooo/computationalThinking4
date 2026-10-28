@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { ItemTemplate } from '~/types/board'
+
 const MIN_SCALE = 0.25
 const MAX_SCALE = 4
 
@@ -6,6 +8,8 @@ const offset = reactive({ x: 0, y: 0 })
 const scale = ref(1)
 provide('canvasScale', scale)
 let dragging = false
+
+const emit = defineEmits<{ 'drop-item': [template: ItemTemplate, x: number, y: number] }>()
 
 function zoomAt(pointX: number, pointY: number, factor: number) {
   const nextScale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, scale.value * factor))
@@ -39,6 +43,13 @@ function onPointerMove(event: PointerEvent) {
 function onPointerUp() {
   dragging = false
 }
+
+// Converts the drop position from screen to board coordinates.
+function onDrop(event: DragEvent) {
+  const data = event.dataTransfer?.getData(DRAG_TYPE)
+  if (!data) return
+  emit('drop-item', JSON.parse(data), (event.clientX - offset.x) / scale.value, (event.clientY - offset.y) / scale.value)
+}
 </script>
 
 <template>
@@ -53,6 +64,8 @@ function onPointerUp() {
     @pointerdown="onPointerDown"
     @pointermove="onPointerMove"
     @pointerup="onPointerUp"
+    @dragover.prevent
+    @drop.prevent="onDrop"
   >
     <div
       class="absolute top-0 left-0 origin-top-left"

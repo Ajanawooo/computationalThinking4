@@ -1,12 +1,16 @@
 <script setup lang="ts">
-import type { Note } from '~/types/note'
-
-const note = ref<Note>({ x: 120, y: 120, width: 192, height: 192, text: 'Hello, board!' })
-const selected = ref(false)
+const { state, addItem, select } = useBoard()
+useShortcuts()
 </script>
 
 <template>
-  <InfiniteCanvas @pointerdown="selected = false">
-    <StickyNote v-model="note" :selected="selected" @select="selected = true" />
+  <InfiniteCanvas @pointerdown="select(null)" @drop-item="addItem">
+    <template v-for="item in state.items" :key="item.id">
+      <StickyNote v-if="item.kind === 'note'" :item="item" />
+      <TextBox v-else-if="item.kind === 'text'" :item="item" />
+      <CircleShape v-else :item="item" />
+    </template>
+    <ItemEditBar />
   </InfiniteCanvas>
+  <BoardToolbar />
 </template>
