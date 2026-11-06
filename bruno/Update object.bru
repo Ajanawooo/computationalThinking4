@@ -1,0 +1,18 @@
+meta {
+  name: Update object
+  type: http
+  seq: 3
+}
+
+patch {
+  url: http://localhost:3001/objects/note-1
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "x": 240,
+    "y": 240
+  }
+}

@@ -1,0 +1,26 @@
+meta {
+  name: Add object
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:3001/objects
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": "note-1",
+    "type": "sticky-note",
+    "x": 120,
+    "y": 120,
+    "width": 192,
+    "height": 192,
+    "text": "Hello, board!",
+    "color": "yellow",
+    "fontSize": 18,
+    "bold": false
+  }
+}

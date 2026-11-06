@@ -1,0 +1,6 @@
+{
+  "version": "1",
+  "name": "computationalThinking4",
+  "type": "collection",
+  "ignore": ["node_modules", ".git"]
+}
