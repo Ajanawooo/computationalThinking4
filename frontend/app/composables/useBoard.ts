@@ -22,14 +22,18 @@ const pendingChanges = new Map<string, { changes: ObjectChanges; timer: ReturnTy
 export function useBoard() {
   const api = $fetch.create({ baseURL: useRuntimeConfig().public.apiBase })
   const objects = useState<BoardObject[]>('objects', () => [])
+  const boardId = useState<string>('boardId', () => '')
 
-  async function load() {
-    objects.value = await api<BoardObject[]>('/objects')
+  // Shows the objects of one board. A slow answer for a board that is no longer open is ignored.
+  async function load(id: string) {
+    boardId.value = id
+    const loaded = await api<BoardObject[]>(`/boards/${id}/objects`)
+    if (boardId.value === id) objects.value = loaded
   }
 
   function insert(object: BoardObject) {
     objects.value = [...objects.value, object]
-    api('/objects', { method: 'POST', body: object })
+    api(`/boards/${boardId.value}/objects`, { method: 'POST', body: object })
   }
 
   function addObject(template: ObjectTemplate, centerX: number, centerY: number) {
